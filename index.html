@@ -24,7 +24,7 @@
       fill: rgb(255, 255, 255); /* Legend text color */
     }
     #unpopulated {
-      fill: #D3D3D3;
+      fill: #A9A9A9; /* Darker grey for unpopulated areas */
     }
   </style>
 </head>
@@ -78,8 +78,9 @@
           .enter()
           .append("path")
           .attr("d", geopath)
-          .attr("stroke", "none")
-          .attr("fill", d => d.properties.Population === 0 ? "#D3D3D3" : colorScale(d.properties.Population)) // 0 population areas are light grey
+          .attr("stroke", "#696969") // Dark grey border for each district
+          .attr("stroke-width", 1)   // Set border width to make it visible
+          .attr("fill", d => d.properties.Population === 0 ? "#A9A9A9" : colorScale(d.properties.Population)) // Darker grey for unpopulated areas
           .attr("opacity", 1)
           .on("mouseover", function (event, d) {
               svg.selectAll("path")
@@ -98,7 +99,7 @@
           .on("mouseout", function () {
               svg.selectAll("path")
                   .attr("opacity", 1)
-                  .attr("stroke", "none");
+                  .attr("stroke", "#696969");  // Reset the border color on mouseout
 
               // Reset label color
               d3.select(this).select("title")
