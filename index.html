@@ -1,3 +1,4 @@
+<!-- This assignment is submitted by Amrutha Prabhakaran (1009609) for HCDIV-Assignment-4 2024-->
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,15 +14,15 @@
     svg {
       display: block;
       margin: 0 auto;
-      background-color: #030f1d; /* Dark background for the map */
+      background-color: #030f1d; 
     }
     h1 {
       margin-top: 20px;
-      color: rgb(255, 255, 255); /* Title color */
+      color: rgb(255, 255, 255); 
     }
     #legend text {
       font-size: 12px;
-      fill: rgb(255, 255, 255); /* Legend text color */
+      fill: rgb(255, 255, 255); 
     }
     #unpopulated {
       fill: #A9A9A9; /* Darker grey for unpopulated areas */
@@ -36,16 +37,16 @@
   <script>
   let width = 1200, height = 600;
 
-  // Create SVG element and add zoom functionality
+  
   let svg = d3.select("svg")
       .attr("viewBox", "0 0 " + width + " " + height)
       .call(d3.zoom()
-          .scaleExtent([1, 8]) // Limit zoom scale
-          .on("zoom", zoomed)) // Zoom event
+          .scaleExtent([1, 8]) 
+          .on("zoom", zoomed)) 
       .append("g");
 
   function zoomed(event) {
-      svg.attr("transform", event.transform); // Apply zoom and pan transformations
+      svg.attr("transform", event.transform); 
   }
 
   Promise.all([d3.json("sgmap.json"), d3.csv("population2023.csv")]).then(data => {
@@ -59,16 +60,16 @@
       });
 
       let projection = d3.geoMercator()
-          .center([103.85, 1.36]) // Adjusted center
-          .fitExtent([[50, 20], [1150, 580]], data[0]); // Adjust fitExtent for padding
+          .center([103.85, 1.36]) 
+          .fitExtent([[50, 20], [1150, 580]], data[0]); 
 
       let geopath = d3.geoPath().projection(projection);
 
       const maxPopulation = d3.max(mapData.map(d => d.properties.Population));
       const minPopulation = d3.min(mapData.map(d => d.properties.Population));
 
-      // Define the revised monochrome color scale from light to dark blue
-      const colorScale = d3.scaleSequential(d3.interpolateBlues)  // Monochrome blue scale
+      
+      const colorScale = d3.scaleSequential(d3.interpolateBlues)  
           .domain([minPopulation, maxPopulation]);
 
       const districts = svg.append("g")
@@ -78,8 +79,8 @@
           .enter()
           .append("path")
           .attr("d", geopath)
-          .attr("stroke", "#696969") // Dark grey border for each district
-          .attr("stroke-width", 1)   // Set border width to make it visible
+          .attr("stroke", "#696969") 
+          .attr("stroke-width", .5)   
           .attr("fill", d => d.properties.Population === 0 ? "#A9A9A9" : colorScale(d.properties.Population)) // Darker grey for unpopulated areas
           .attr("opacity", 1)
           .on("mouseover", function (event, d) {
@@ -92,23 +93,23 @@
                   .attr("stroke", "#3F8AFA")
                   .attr("stroke-width", 3);
 
-              // Change label color to black on hover
+              
               d3.select(this).select("title")
                   .style("fill", "black");
           })
           .on("mouseout", function () {
               svg.selectAll("path")
                   .attr("opacity", 1)
-                  .attr("stroke", "#696969");  // Reset the border color on mouseout
+                  .attr("stroke", "#696969");  
 
-              // Reset label color
+              
               d3.select(this).select("title")
                   .style("fill", "white");
           })
           .append("title")
           .text(d => `${d.properties.Name}\n${d.properties.Population} people`);
 
-      // Add gradient legend
+      
       const legendWidth = 200;
       const legendHeight = 20;
 
@@ -159,7 +160,7 @@
           .attr("text-anchor", "middle")
           .text("Population");
 
-      // Add circle below the gradient to represent unpopulated areas
+      
       legend.append("circle")
           .attr("id", "unpopulated")
           .attr("cx", legendWidth / 2)
